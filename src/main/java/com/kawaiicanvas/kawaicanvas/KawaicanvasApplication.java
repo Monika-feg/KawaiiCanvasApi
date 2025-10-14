@@ -13,6 +13,9 @@ public class KawaicanvasApplication {
 		System.setProperty("MONGO_DB_URI", dotenv.get("MONGO_DB_URI"));
 		System.setProperty("AI_KEY", dotenv.get("AI_KEY"));
 		System.setProperty("OPENAI_API_URL", dotenv.get("OPENAI_API_URL"));
+		System.setProperty("CLOUDINARY_API_KEY", dotenv.get("CLOUDINARY_API_KEY"));
+		System.setProperty("CLOUDINARY_API_SECRET", dotenv.get("CLOUDINARY_API_SECRET"));
+		System.setProperty("CLOUDINARY_CLOUD_NAME", dotenv.get("CLOUDINARY_CLOUD_NAME"));
 		SpringApplication.run(KawaicanvasApplication.class, args);
 	}
 
