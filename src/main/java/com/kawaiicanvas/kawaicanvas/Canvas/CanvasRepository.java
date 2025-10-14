@@ -1,5 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Canvas;
 
-public class CanvasRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface CanvasRepository extends MongoRepository<Canvas, String> {
 
 }
