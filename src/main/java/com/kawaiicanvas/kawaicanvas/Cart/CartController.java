@@ -1,5 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Cart;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +37,11 @@ public class CartController {
     @DeleteMapping("/{cartId}/canvas/{canvasId}")
     public Cart removeCanvasFromCart(@PathVariable String cartId, @PathVariable String canvasId) {
         return cartService.removeCanvasFromCart(cartId, canvasId);
+    }
+
+    @GetMapping("/{cartId}/totalPrice")
+    public BigDecimal getTotalPrice(@PathVariable String cartId) {
+        return cartService.getTotalPrice(cartId);
     }
 
 }
