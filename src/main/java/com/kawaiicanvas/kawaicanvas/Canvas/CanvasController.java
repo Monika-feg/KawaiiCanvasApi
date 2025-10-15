@@ -23,6 +23,11 @@ public class CanvasController {
         return canvasService.getAllCanvas();
     }
 
+    @GetMapping("/{id}")
+    public Canvas getCanvasById(@PathVariable String id) {
+        return canvasService.getCanvasById(id);
+    }
+
     // för admin att lägga till nya canvas ( gör en admin inloggning senare)
     @PostMapping()
     public Canvas createNewCanvas(@RequestBody Canvas canvas) {
