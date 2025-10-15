@@ -17,14 +17,17 @@ public class CartService {
     @Autowired
     private CanvasRepository canvasRepository;
 
+    // skapa en ny kundvagn
     public Cart createNewCart(Cart cart) {
         return cartRepository.save(cart);
     }
 
+    // hitta kundvagn med hjälp av id
     public Cart getCartById(String id) {
         return cartRepository.findById(id).orElse(null);
     }
 
+    // Lägger till en tavla till kundvagnen
     public Cart addCanvasToCart(String cartId, String canvasId) {
         Cart cart = getCartById(cartId);
         Canvas canvas = canvasRepository.findById(canvasId).orElse(null);
@@ -37,6 +40,18 @@ public class CartService {
             return cartRepository.save(cart);
         }
 
+        return cart;
+    }
+
+    // tar bort vara ifrån kundvagnen
+    public Cart removeCanvasFromCart(String cartId, String canvasId) {
+        Cart cart = getCartById(cartId);
+        Canvas canvas = canvasRepository.findById(canvasId).orElse(null);
+
+        if (cart != null && canvas != null) {
+            cart.getCanvases().removeIf(existingCanvas -> existingCanvas.getId().equals(canvasId));
+            return cartRepository.save(cart);
+        }
         return cart;
     }
 
