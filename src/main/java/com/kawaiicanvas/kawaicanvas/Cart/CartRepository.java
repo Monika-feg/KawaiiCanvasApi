@@ -1,5 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Cart;
 
-public class CartRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface CartRepository extends MongoRepository<Cart, String> {
 
 }
