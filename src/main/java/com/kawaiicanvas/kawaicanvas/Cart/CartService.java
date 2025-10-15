@@ -1,6 +1,6 @@
 package com.kawaiicanvas.kawaicanvas.Cart;
 
-import java.util.Optional;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +53,17 @@ public class CartService {
             return cartRepository.save(cart);
         }
         return cart;
+    }
+
+    // räkna ut totalpriset i kundvagnen
+    public BigDecimal getTotalPrice(String cartId) {
+        Cart cart = getCartById(cartId);
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (var canvas : cart.getCanvases()) {
+            totalPrice = totalPrice.add(new BigDecimal(canvas.getPrice()));
+        }
+        return totalPrice;
+
     }
 
 }
