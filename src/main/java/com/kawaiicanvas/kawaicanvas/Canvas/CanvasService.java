@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 
+// ser ut såhär så länge ska så småningom ha felhanterare
 @Service
 @AllArgsConstructor
 public class CanvasService {
@@ -14,6 +15,10 @@ public class CanvasService {
 
     public List<Canvas> getAllCanvas() {
         return canvasRepository.findAll();
+    }
+
+    public Canvas getCanvasById(String id) {
+        return canvasRepository.findById(id).orElse(null);
     }
 
     public Canvas createNewCanvas(Canvas canvas) {
