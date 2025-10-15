@@ -16,7 +16,6 @@ public class Canvas {
     @Id
     private String id;
     private String title;
-    private String description;
     private String price;
 
 }
