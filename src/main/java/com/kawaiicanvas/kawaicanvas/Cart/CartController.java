@@ -15,7 +15,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PostMapping()
+    @PostMapping("/newCart")
     public Cart createNewCart(@RequestBody Cart cart) {
         return cartService.createNewCart(cart);
     }
@@ -24,6 +24,11 @@ public class CartController {
     public Cart getCartById(@PathVariable String id) {
         return cartService.getCartById(id);
 
+    }
+
+    @PostMapping("/{cartId}/canvas/{canvasId}")
+    public Cart addCanvasToCart(@PathVariable String cartId, @PathVariable String canvasId) {
+        return cartService.addCanvasToCart(cartId, canvasId);
     }
 
 }
