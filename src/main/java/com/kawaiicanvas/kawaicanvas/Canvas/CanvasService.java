@@ -16,4 +16,12 @@ public class CanvasService {
         return canvasRepository.findAll();
     }
 
+    public Canvas createNewCanvas(Canvas canvas) {
+        return canvasRepository.save(canvas);
+    }
+
+    public void deleteCanvas(String id) {
+        canvasRepository.deleteById(id);
+    }
+
 }
