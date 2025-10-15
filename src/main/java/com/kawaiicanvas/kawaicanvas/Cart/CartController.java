@@ -1,6 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Cart;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,11 @@ public class CartController {
     @PostMapping("/{cartId}/canvas/{canvasId}")
     public Cart addCanvasToCart(@PathVariable String cartId, @PathVariable String canvasId) {
         return cartService.addCanvasToCart(cartId, canvasId);
+    }
+
+    @DeleteMapping("/{cartId}/canvas/{canvasId}")
+    public Cart removeCanvasFromCart(@PathVariable String cartId, @PathVariable String canvasId) {
+        return cartService.removeCanvasFromCart(cartId, canvasId);
     }
 
 }
