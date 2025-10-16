@@ -25,4 +25,9 @@ public class OrderService {
         return order;
     }
 
+    // hämta order med hjälp av id
+    public Order getOrderById(String id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
 }
