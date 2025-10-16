@@ -1,5 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Order;
 
-public class OrderRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface OrderRepository extends MongoRepository<Order, String> {
 
 }
