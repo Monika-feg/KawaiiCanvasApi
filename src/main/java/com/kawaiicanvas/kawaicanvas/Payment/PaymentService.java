@@ -88,7 +88,7 @@ public class PaymentService {
             orderRepository.save(order);
 
             // töm kundvagnen efter betalning
-            // cartService.clearCart(cartId);
+            cartService.clearCart(cartId);
 
             return session.getUrl();
 
