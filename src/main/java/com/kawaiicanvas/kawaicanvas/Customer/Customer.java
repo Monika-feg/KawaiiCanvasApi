@@ -1,6 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Customer;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,17 @@ import lombok.NoArgsConstructor;
 @Valid
 public class Customer {
 
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
     private String shippingAddress;
+    @NotBlank
     private String shippingCity;
+    @NotBlank
     private String postalCode;
-    private int phoneNumber;
+    @NotBlank
+    private String phoneNumber;
 
 }
