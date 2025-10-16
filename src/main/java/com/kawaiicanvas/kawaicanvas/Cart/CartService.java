@@ -59,8 +59,18 @@ public class CartService {
     public BigDecimal getTotalPrice(String cartId) {
         Cart cart = getCartById(cartId);
         BigDecimal totalPrice = BigDecimal.ZERO;
+        // leverans avgift
+        BigDecimal deliveryFee = new BigDecimal("49");
+        // här är gränsen för fri frakt
+        BigDecimal freeDeliveryThreshold = new BigDecimal("200");
+        // lägger ihop priset för varje tavla i kundvagnen
         for (var canvas : cart.getCanvases()) {
             totalPrice = totalPrice.add(new BigDecimal(canvas.getPrice()));
+        }
+
+        // om totalpriset är under 200 kr läggs leveransavgiften på totalpriset
+        if (totalPrice.compareTo(freeDeliveryThreshold) < 0) {
+            totalPrice = totalPrice.add(deliveryFee);
         }
         return totalPrice;
 
