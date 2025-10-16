@@ -66,4 +66,16 @@ public class CartService {
 
     }
 
+    // töm varukorgen
+    public Cart clearCart(String cartId) {
+        Cart cart = cartRepository.findById(cartId).orElse(null);
+        if (cart != null) {
+            cart.getCanvases().forEach(canvas -> canvas.setCart(null));
+            cart.getCanvases().clear();
+            return cartRepository.save(cart);
+        }
+        return cart;
+
+    }
+
 }
