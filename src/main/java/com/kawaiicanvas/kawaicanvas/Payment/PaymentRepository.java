@@ -1,5 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Payment;
 
-public class PaymentRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface PaymentRepository extends MongoRepository<Payment, String> {
 
 }
