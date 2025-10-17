@@ -1,12 +1,14 @@
 package com.kawaiicanvas.kawaicanvas.Bot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kawaiicanvas.kawaicanvas.Bot.model.ChatResponse;
 import com.kawaiicanvas.kawaicanvas.Bot.model.ChatbotDto;
+import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
 
 @RestController
 public class ChatController {
@@ -15,10 +17,14 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/bot")
-    public String chatMessage(@RequestBody ChatbotDto chatbotDto) {
-
-        ChatResponse response = chatService.sendChatResponse(chatbotDto.prompt(), chatbotDto.systemPrompt());
-        return response.getChoices().get(0).getMessage().getContent();
+    public ResponseEntity<KawaiiResponse<String>> chatMessage(@RequestBody ChatbotDto chatbotDto) {
+        try {
+            ChatResponse response = chatService.sendChatResponse(chatbotDto.prompt(), chatbotDto.systemPrompt());
+            return ResponseEntity.ok(new KawaiiResponse<>("Response successful",
+                    response.getChoices().get(0).getMessage().getContent()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
+        }
 
     }
 
