@@ -6,6 +6,7 @@ import com.kawaiicanvas.kawaicanvas.Cart.CartService;
 import com.kawaiicanvas.kawaicanvas.Order.Order;
 import com.kawaiicanvas.kawaicanvas.Order.OrderRepository;
 import com.stripe.Stripe;
+import com.stripe.exception.CardException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
@@ -97,6 +98,5 @@ public class PaymentService {
             return "Fel vid betalning, försök igen senare";
 
         }
-
     }
 }
