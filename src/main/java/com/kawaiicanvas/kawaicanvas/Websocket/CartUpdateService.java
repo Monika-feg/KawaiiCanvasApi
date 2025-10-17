@@ -12,6 +12,9 @@ public class CartUpdateService {
 
     // lägger till en tavla i kundvagnen
     public CartUpdateMessage addToCart(String cartId) {
+        if (cartId == null) {
+            throw new IllegalAccessError(" cartId cannot be null");
+        }
         // hämtar kundvagnen eller skapar en ny om den inte finns
         CartUpdateMessage cart = carts.computeIfAbsent(cartId, id -> new CartUpdateMessage(id, 0));
         // lägger till en tavla
