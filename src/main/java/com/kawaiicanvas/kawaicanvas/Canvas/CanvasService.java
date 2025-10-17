@@ -39,6 +39,7 @@ public class CanvasService {
     }
 
     // skapar en ny tavla( endast för admin)
+
     public Canvas createNewCanvas(Canvas canvas) {
         try {
             return canvasRepository.save(canvas);
