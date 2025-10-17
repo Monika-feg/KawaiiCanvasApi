@@ -55,9 +55,10 @@ public class OrderControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/{id}", "testOrderId")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("testOrderId"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.cart.id").value("testCartId"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.cart.canvases").isArray());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Order retrieved successfully"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value("testOrderId"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.cart.id").value("testCartId"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.cart.canvases").isArray());
 
     }
 

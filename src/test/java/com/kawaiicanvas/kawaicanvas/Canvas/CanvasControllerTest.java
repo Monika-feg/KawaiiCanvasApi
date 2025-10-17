@@ -37,8 +37,9 @@ public class CanvasControllerTest {
         // utför GET-förfrågan och verifierar svaret
         mockMvc.perform(MockMvcRequestBuilders.get("/api/canvas/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Test Canvas"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value("100"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Canvas retrieved successfully"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value("1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.title").value("Test Canvas"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.price").value("100"));
     }
 }
