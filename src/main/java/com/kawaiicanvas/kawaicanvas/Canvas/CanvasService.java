@@ -2,6 +2,8 @@ package com.kawaiicanvas.kawaicanvas.Canvas;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -13,20 +15,51 @@ public class CanvasService {
 
     private final CanvasRepository canvasRepository;
 
+    // hämtar alla tavlor
     public List<Canvas> getAllCanvas() {
-        return canvasRepository.findAll();
+        try {
+            return canvasRepository.findAll();
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException(" Canvas data is invalid ", e);
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Could not find Canvases ", e);
+        }
+
     }
 
+    // hämtar en tavla med id
     public Canvas getCanvasById(String id) {
-        return canvasRepository.findById(id).orElse(null);
+        try {
+            return canvasRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Could not find canvas with id: " + id));
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException(" Canvas data is invalid ", e);
+        }
+
     }
 
+    // skapar en ny tavla( endast för admin)
     public Canvas createNewCanvas(Canvas canvas) {
-        return canvasRepository.save(canvas);
+        try {
+            return canvasRepository.save(canvas);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException(" Canvas data is invalid ", e);
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Could not create canvas ", e);
+        }
+
     }
 
+    // tar bort en tavla med id ( endast för admin)
     public void deleteCanvas(String id) {
-        canvasRepository.deleteById(id);
+        try {
+            canvasRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException(" Canvas data is invalid ", e);
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Could not delete canvas with id: " + id, e);
+        }
+
     }
 
 }
