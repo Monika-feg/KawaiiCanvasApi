@@ -22,16 +22,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 // https://www.baeldung.com/swagger-operation-vs-apiresponse
 @RestController
 @RequestMapping("/api/canvas")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+        @ApiResponse(responseCode = "400", description = "Bad request"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+})
 public class CanvasController {
 
     @Autowired
     private CanvasService canvasService;
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
 
     @GetMapping()
     public ResponseEntity<KawaiiResponse<List<Canvas>>> getAllCanvas() {
