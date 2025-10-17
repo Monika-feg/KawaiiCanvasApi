@@ -1,6 +1,8 @@
 package com.kawaiicanvas.kawaicanvas.Order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.kawaiicanvas.kawaicanvas.Cart.Cart;
@@ -17,17 +19,28 @@ public class OrderService {
 
     // Spara nyorder
     public Order saveNewOrder(Order order, String cartId) {
-        Cart cart = cartRepository.findById(cartId).orElse(null);
-        if (cart != null) {
+        try {
+            Cart cart = cartRepository.findById(cartId)
+                    .orElseThrow(() -> new RuntimeException("Could not find cart with id: " + cartId));
             order.setCart(cart);
             return orderRepository.save(order);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException(" Order data is invalid ", e);
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Could not create order ", e);
         }
-        return order;
+
     }
 
     // hämta order med hjälp av id
     public Order getOrderById(String id) {
-        return orderRepository.findById(id).orElse(null);
+        try {
+            return orderRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Could not find order with id: " + id));
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException(" Order data is invalid ", e);
+        }
+
     }
 
 }

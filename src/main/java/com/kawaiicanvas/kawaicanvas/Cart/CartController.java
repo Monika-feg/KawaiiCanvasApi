@@ -17,21 +17,24 @@ import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+// för felhantering har jag inspirerats av dessa
+// https://www.baeldung.com/spring-rest-openapi-documentation
+// https://www.baeldung.com/swagger-operation-vs-apiresponse
 @RestController
 @RequestMapping("/api/cart")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+        @ApiResponse(responseCode = "400", description = "Bad request"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+})
 public class CartController {
 
     @Autowired
     private CartService cartService;
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-
     // skapa ny kundvagn
     @PostMapping("/newCart")
+
     public ResponseEntity<KawaiiResponse<Cart>> createNewCart(@RequestBody Cart cart) {
         try {
             Cart newCart = cartService.createNewCart(cart);
