@@ -45,9 +45,9 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 // konverterar inputCart till JSON och skickar med i förfrågan
                 .content(objectMapper.writeValueAsString(inputCart)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("testCartId"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.canvases").isArray());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Created cart successfully"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value("testCartId"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.canvases").isArray());
 
     }
 
