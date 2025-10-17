@@ -19,6 +19,8 @@ public class KawaicanvasApplication {
 		System.setProperty("STRIPE_API_KEY", dotenv.get("STRIPE_API_KEY"));
 		System.setProperty("STRIPE_SUCCESS_URL", dotenv.get("STRIPE_SUCCESS_URL"));
 		System.setProperty("STRIPE_CANCEL_URL", dotenv.get("STRIPE_CANCEL_URL"));
+		System.setProperty("ADMIN_USERNAME", dotenv.get("ADMIN_USERNAME"));
+		System.setProperty("ADMIN_PASSWORD", dotenv.get("ADMIN_PASSWORD"));
 		SpringApplication.run(KawaicanvasApplication.class, args);
 	}
 

@@ -54,7 +54,7 @@ public class CanvasController {
     }
 
     // för admin att lägga till nya canvas ( gör en admin inloggning senare)
-    @PostMapping()
+    @PostMapping("/admin/newCanvas")
     public ResponseEntity<KawaiiResponse<Canvas>> createNewCanvas(@RequestBody Canvas canvas) {
         try {
             Canvas createdCanvas = canvasService.createNewCanvas(canvas);
@@ -65,7 +65,7 @@ public class CanvasController {
     }
 
     // bara för Admin att ta bort canvas (gör en admin inloggning senare)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/deleteCanvas/{id}")
     public ResponseEntity<KawaiiResponse<String>> deleteCanvas(@PathVariable String id) {
         try {
             canvasService.deleteCanvas(id);
