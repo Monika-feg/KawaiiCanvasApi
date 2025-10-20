@@ -47,12 +47,9 @@ KawaiiCanvasApi är ett backend-API byggt med Spring Boot och MongoDB Atlas för
    ADMIN_PASSWORD=lösenord
    ```
 
-6. Starta API:et med Run Java-knappen i din IDE eller via terminalen:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-
 ## Docker
+
+För att starta projektet och din container
 
 Bygg Docker-image:
 
@@ -101,5 +98,3 @@ Monika Engström – [GitHub](https://github.com/Monika-feg)
 ## Licens
 
 SkolProjekt
-
-projektet stratar när du kör
