@@ -2,6 +2,7 @@ package com.kawaiicanvas.kawaicanvas.Order;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class OrderServiceTest {
     @InjectMocks
     private OrderService orderService;
 
-    // test för hämta order med hjälp av id
+    // test för hämta order med hjälp av id och om den hittar rätt order
     @Test
     public void getOrderByIdTest() {
 
@@ -64,6 +65,41 @@ public class OrderServiceTest {
         assertEquals(cart, result.getCart());
         assertEquals("testCartId", result.getCart().getId());
         assertEquals(2, result.getCart().getCanvases().size());
+    }
+
+    // om den inte hittar order med angivet id
+    @Test
+    public void getOrderByIdNotFoundTest() {
+
+        // skapa nya tavlor
+        Canvas canvas1 = new Canvas();
+        canvas1.setId("1");
+        canvas1.setTitle("Cute Cat");
+        canvas1.setPrice("80");
+        Canvas canvas2 = new Canvas();
+        canvas2.setId("2");
+        canvas2.setTitle("Adorable Dog");
+        canvas2.setPrice("50");
+
+        // skapa en ny kundvagn
+        Cart cart = new Cart();
+        cart.setId("testCartId");
+        cart.setCanvases(new ArrayList<>()); // Initialisera listan först
+        cart.getCanvases().add(canvas1);
+        cart.getCanvases().add(canvas2);
+
+        // skapa en ny order
+        Order order = new Order();
+        order.setId("");
+        order.setCart(cart);
+
+        when(orderRepository.findById("testId")).thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.getOrderById("testId");
+        });
+
+        assertEquals("Could not find order with id: testId", exception.getMessage());
     }
 
 }

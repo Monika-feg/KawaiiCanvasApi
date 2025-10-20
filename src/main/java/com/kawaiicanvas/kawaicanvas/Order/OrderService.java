@@ -36,7 +36,7 @@ public class OrderService {
     public Order getOrderById(String id) {
         try {
             return orderRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Could not find order with id: " + id));
+                    .orElseThrow(() -> new IllegalArgumentException("Could not find order with id: " + id));
         } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException(" Order data is invalid ", e);
         }

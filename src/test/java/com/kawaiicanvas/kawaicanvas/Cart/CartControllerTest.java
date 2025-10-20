@@ -58,4 +58,25 @@ public class CartControllerTest {
 
     }
 
+    // om det inte går att skapa en ny kundvagn
+    @Test
+    @WithMockUser(username = "Testadmin", roles = "ADMIN")
+    public void createNewCartBadRequest() throws Exception {
+
+        // skapa en ny kundvagn med en tom lista av tavlor
+        Cart inputCart = new Cart();
+        inputCart.setCanvases(Arrays.asList());
+
+        Mockito.when(cartService.createNewCart(Mockito.any(Cart.class)))
+                .thenThrow(new IllegalArgumentException("Could not create cart"));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/cart/newCart")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        // konverterar inputCart till JSON och skickar med i förfrågan
+                        .content(objectMapper.writeValueAsString(inputCart)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+    }
+
 }

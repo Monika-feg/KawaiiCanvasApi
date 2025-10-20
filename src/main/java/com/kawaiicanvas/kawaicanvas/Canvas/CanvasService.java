@@ -31,7 +31,7 @@ public class CanvasService {
     public Canvas getCanvasById(String id) {
         try {
             return canvasRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Could not find canvas with id: " + id));
+                    .orElseThrow(() -> new IllegalArgumentException("Could not find canvas with id: " + id));
         } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException(" Canvas data is invalid ", e);
         }
@@ -41,6 +41,9 @@ public class CanvasService {
     // skapar en ny tavla( endast för admin)
 
     public Canvas createNewCanvas(Canvas canvas) {
+        if (canvas.getTitle() == null || canvas.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Title can not be empty");
+        }
         try {
             return canvasRepository.save(canvas);
         } catch (DataIntegrityViolationException e) {
