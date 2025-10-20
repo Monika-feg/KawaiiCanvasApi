@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
 
@@ -20,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 // för felhantering har jag inspirerats av dessa
 // https://www.baeldung.com/spring-rest-openapi-documentation
 // https://www.baeldung.com/swagger-operation-vs-apiresponse
+// för cookie https://www.baeldung.com/java-servlet-cookies-session och https://www.geeksforgeeks.org/springboot/working-with-cookies-in-spring-mvc-using-cookievalue-annotation/
 @RestController
 @RequestMapping("/api/cart")
 @ApiResponses(value = {
@@ -35,9 +39,14 @@ public class CartController {
     // skapa ny kundvagn
     @PostMapping("/newCart")
 
-    public ResponseEntity<KawaiiResponse<Cart>> createNewCart(@RequestBody Cart cart) {
+    public ResponseEntity<KawaiiResponse<Cart>> createNewCart(@RequestBody Cart cart, HttpServletResponse response) {
         try {
             Cart newCart = cartService.createNewCart(cart);
+            Cookie cartCookie = new Cookie("cartId", newCart.getId());
+            // Sätter cookien att vara giltig i 5 dagar
+            cartCookie.setMaxAge(60 * 60 * 24 * 5);
+            response.addCookie(cartCookie);
+
             return ResponseEntity.ok(KawaiiResponse.success("Created cart successfully", newCart));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
@@ -60,9 +69,9 @@ public class CartController {
     }
 
     // lägger till canvas till kunvagnen
-    @PostMapping("/{cartId}/canvas/{canvasId}")
+    @PatchMapping("/{cartId}/canvas/{canvasId}")
     public ResponseEntity<KawaiiResponse<Cart>> addCanvasToCart(@PathVariable String cartId,
-            @PathVariable String canvasId) {
+            @PathVariable String canvasId, HttpServletResponse response) {
         try {
             Cart updatedCart = cartService.addCanvasToCart(cartId, canvasId);
             return ResponseEntity.ok(KawaiiResponse.success("Added canvas to cart successfully", updatedCart));
