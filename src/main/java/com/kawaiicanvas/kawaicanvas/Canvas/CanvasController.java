@@ -34,6 +34,7 @@ public class CanvasController {
 
     @GetMapping()
     public ResponseEntity<KawaiiResponse<List<Canvas>>> getAllCanvas() {
+
         try {
             List<Canvas> canvases = canvasService.getAllCanvas();
             return ResponseEntity.ok(KawaiiResponse.success("Canvas retrieved successfully", canvases));
@@ -47,6 +48,9 @@ public class CanvasController {
     public ResponseEntity<KawaiiResponse<Canvas>> getCanvasById(@PathVariable String id) {
         try {
             Canvas canvas = canvasService.getCanvasById(id);
+            if (canvas == null || canvas.getId() == null) {
+                return ResponseEntity.badRequest().body(KawaiiResponse.error("Canvas not found"));
+            }
             return ResponseEntity.ok(KawaiiResponse.success("Canvas retrieved successfully", canvas));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));

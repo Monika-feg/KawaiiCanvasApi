@@ -1,6 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Canvas;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+// test för att canvas kan sparas rätt
 // Använder Mockito för att skapa mock-objekt och injicera dem i CanvasService
 @ExtendWith(MockitoExtension.class)
 public class CanvasServiceTest {
@@ -42,6 +44,21 @@ public class CanvasServiceTest {
         // Kontrollera att Canvas-objektet returnerat av service-metoden har rätt värden
         assertEquals("Test Canvas", received.getTitle());
         assertEquals("100", received.getPrice());
+    }
+
+    // test ifall det blir badrequest
+    @Test
+    public void saveCanvasBadRequestTest() {
+        Canvas canvas = new Canvas();
+        canvas.setTitle(""); // tom titel för att simulera ogiltig inmatning
+        canvas.setPrice("100");
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            canvasService.createNewCanvas(canvas);
+        });
+
+        assertEquals("Title can not be empty", exception.getMessage());
+
     }
 
 }

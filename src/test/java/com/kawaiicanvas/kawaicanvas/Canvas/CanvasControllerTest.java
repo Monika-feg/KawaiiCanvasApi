@@ -45,4 +45,25 @@ public class CanvasControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.price").value("100"));
 
     }
+
+    // om den inte hittar canvas med id
+    @Test
+    @WithMockUser(username = "TestAdmin", roles = "ADMIN")
+    public void getCanvasByIdNotFoundTest() throws Exception {
+        // skapar ett nytt canvas objekt
+        Canvas canvas = new Canvas();
+        canvas.setId(null);
+        canvas.setTitle("Test Canvas");
+        canvas.setPrice("100");
+
+        // mockar service-svar
+        when(canvasService.getCanvasById("1")).thenThrow(new IllegalArgumentException("Canvas not found"));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/canvas/{id}", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+    }
+
 }

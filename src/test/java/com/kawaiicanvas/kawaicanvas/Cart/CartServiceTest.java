@@ -10,6 +10,7 @@ import com.kawaiicanvas.kawaicanvas.Canvas.Canvas;
 
 public class CartServiceTest {
 
+    // Räkna ut totalpris och leveransavgift och om det blir rätt
     @Test
     public void getTotalPriceAndDeliveryFeeTest() {
         // skapa en kundvagn
@@ -47,6 +48,7 @@ public class CartServiceTest {
         assertEquals(new BigDecimal("179"), totalPrice);
     }
 
+    // Test för att räkna ut totalpriset utan leveransavgift om det blir rätt
     @Test
     public void totalPriceWithoutDeliveryFeeTest() {
         // skapa en kundvagn
@@ -82,6 +84,7 @@ public class CartServiceTest {
 
         // Lägg till assertion för att verifiera resultatet
         assertEquals(new BigDecimal("220"), totalPrice);
+
     }
 
 }

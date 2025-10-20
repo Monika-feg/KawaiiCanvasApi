@@ -26,6 +26,7 @@ public class OrderControllerTest {
     @MockitoBean
     private OrderService orderService;
 
+    // test som går igenom
     @Test
     @WithMockUser(username = "testAdmin", roles = "ADMIN")
     public void getOrderByIdTest() throws Exception {
@@ -61,6 +62,43 @@ public class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value("testOrderId"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.cart.id").value("testCartId"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.cart.canvases").isArray());
+
+    }
+
+    // test med badrequest
+    @Test
+    @WithMockUser(username = "testAdmin", roles = "ADMIN")
+    public void getOrderByIdBadRequestTest() throws Exception {
+
+        // skapa ny canvas
+        Canvas canvas = new Canvas();
+        canvas.setId("1");
+        canvas.setTitle("Cute Cat");
+        canvas.setPrice("80");
+        Canvas canvas2 = new Canvas();
+        canvas2.setId("2");
+        canvas2.setTitle("Adorable Dog");
+        canvas2.setPrice("50");
+
+        // skpa ny cart
+        Cart cart = new Cart();
+        cart.setId("testCartId");
+        cart.setCanvases(new ArrayList<>());
+        cart.getCanvases().add(canvas);
+        cart.getCanvases().add(canvas2);
+        // skapa ny order
+        Order order = new Order();
+        order.setId("testOrderId");
+        order.setCart(cart);
+
+        // mocka repository beteende
+        when(orderService.getOrderById("testId"))
+                .thenThrow(new IllegalArgumentException("Could not find order with id: testId"));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/orders/{id}", "testId")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 

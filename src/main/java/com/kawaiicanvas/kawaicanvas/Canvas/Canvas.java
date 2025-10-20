@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kawaiicanvas.kawaicanvas.Cart.Cart;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +17,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Valid
 public class Canvas {
 
     @Id
     private String id;
+    @NotBlank
     private String title;
+    @NotBlank
     private String price;
 
     @DocumentReference
