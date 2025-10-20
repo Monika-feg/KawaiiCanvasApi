@@ -33,5 +33,40 @@
     "name": "admin.username",
     "type": "java.lang.String",
     "description": "A description for 'admin.username'"
+  },
+  {
+    "name": "app.stripe.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'app.stripe.api.key'"
+  },
+  {
+    "name": "app.openai.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'app.openai.api.key'"
+  },
+  {
+    "name": "app.openai.api.url",
+    "type": "java.lang.String",
+    "description": "A description for 'app.openai.api.url'"
+  },
+  {
+    "name": "app.stripe.success.url",
+    "type": "java.lang.String",
+    "description": "A description for 'app.stripe.success.url'"
+  },
+  {
+    "name": "app.stripe.cancel.url",
+    "type": "java.lang.String",
+    "description": "A description for 'app.stripe.cancel.url'"
+  },
+  {
+    "name": "app.admin.username",
+    "type": "java.lang.String",
+    "description": "A description for 'app.admin.username'"
+  },
+  {
+    "name": "app.admin.password",
+    "type": "java.lang.String",
+    "description": "A description for 'app.admin.password'"
   }
 ]}
