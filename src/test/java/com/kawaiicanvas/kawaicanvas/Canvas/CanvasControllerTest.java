@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -24,6 +25,7 @@ public class CanvasControllerTest {
 
     // detta test ska hämta en canvas med ett specifikt id
     @Test
+    @WithMockUser(username = "TestAdmin", roles = "ADMIN")
     public void getCanvasByIdTest() throws Exception {
         // skapar ett nytt canvas objekt
         Canvas canvas = new Canvas();
@@ -37,9 +39,10 @@ public class CanvasControllerTest {
         // utför GET-förfrågan och verifierar svaret
         mockMvc.perform(MockMvcRequestBuilders.get("/api/canvas/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Canvas retrieved successfully"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value("1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.title").value("Test Canvas"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.price").value("100"));
+
     }
 }
