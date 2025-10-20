@@ -17,13 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class PaymentService {
 
-    @Value("${stripe.api.key}")
+    @Value("${app.stripe.api.key}")
     private String stripeApiKey;
 
-    @Value("${stripe.success.url}")
+    @Value("${app.stripe.success.url}")
     private String stripeSuccessUrl;
 
-    @Value("${stripe.cancel.url}")
+    @Value("${app.stripe.cancel.url}")
     private String stripeCancelUrl;
 
     @Autowired
