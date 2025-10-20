@@ -1,62 +1,105 @@
 # KawaiiCanvasApi
 
-KawaiiCanvasApi är en backan-API byggt med spring boot och mongoDB atlas för att hantera en webbshop. Projektet är en skol uppgift och kan enkelt köras lokalt. Finns även en deployadversion fram till 17/11 -2025.
+KawaiiCanvasApi är ett backend-API byggt med Spring Boot och MongoDB Atlas för att hantera en webbshop. Projektet är en skoluppgift och kan enkelt köras lokalt. Finns även en deployad version fram till 17/11 -2025.
 
-# Funktioner
+## Funktioner
 
-* API ( som hjälper till som en kundtjänst)
-* Websocket för att räkna kundkorgen
-* Hantera tavlor ( hämta tavlor, hämta via id, skapa nya tavlor och ta bort tavlor)
-* Hantera kundvagn
-* hantera order
-* Säkerhet med spring Security
-* MongoDb Atlas
-* Docker file
-* Enkel betalning med hjälp av Stripe
+- API (kundtjänst med OpenAI)
+- WebSocket för att räkna kundkorgen
+- Hantera tavlor (hämta, skapa, ta bort)
+- Hantera kundvagn
+- Hantera order
+- Säkerhet med Spring Security
+- MongoDB Atlas
+- Dockerfile
+- Enkel betalning med Stripe
 
-#Teknologier
+## Teknologier
 
-* Java 21
-* spring boot 3.5
-* MongoDb Atlas
-* Maven
-* Docker
+- Java 21
+- Spring Boot 3.5
+- MongoDB Atlas
+- Maven
+- Docker
+- Stripe
+- OpenAI
+- WebSocket
 
-# Kom igång
+## Kom igång
 
-Klona ner repot:
-```bash
-git@github.com:Monika-feg/KawaiiCanvasApi.git
+1. Klona ner repot:
+   ```bash
+   git clone git@github.com:Monika-feg/KawaiiCanvasApi.git
+   ```
+2. Ha ett konto på MongoDB Atlas: https://www.mongodb.com
+3. Skapa ett konto på Stripe: https://stripe.com
+4. Skapa ett konto på OpenAI: https://platform.openai.com
+5. Skapa en .env-fil likt detta exempel:
+
+   ```env
+   MONGO_DB_URI=din mongoDB
+   AI_KEY=din AI nyckel
+   OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+   STRIPE_API_KEY=din stripe nyckel
+   STRIPE_SUCCESS_URL=https://example.com/success
+   STRIPE_CANCEL_URL=https://example.com/cancel
+   ADMIN_USERNAME=din admin
+   ADMIN_PASSWORD=lösenord
+   ```
+
+6. Starta API:et med Run Java-knappen i din IDE eller via terminalen:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+## Docker
+
+Bygg Docker-image:
+
+```powershell
+docker build -t kawaicanvas-api .
 ```
-Ha ett konto på MongoDb Atlas
+
+Starta containern:
+
+```powershell
+docker run -p 8080:8080 kawaicanvas-api
+```
+
+## API-exempel
+
+**Exempel på fler endpoints:**
+
+- `GET /canvas` – Hämta alla tavlor
+- `POST /cart` – Lägg till i kundvagn
+- `POST /order` – Skapa order
+
+## Docker
+
+Bygg och kör med Docker:
+
 ```bash
 https://www.mongodb.com
 ```
-Skapa ett konto på Stripe om du inte har
+
+## Testa
+
+Kör tester:
+
 ```bash
-https://stripe.com
+./mvnw test
 ```
 
-Skapa ett konto på OpenAI om du inte har :
-```bash
-```
+## Bidra
 
-1. Skapa en .env fil likt detta exempel:
-```bash
-MONGO_DB_URI=din mongoDB
+Bidrag är välkomna! Skapa gärna en issue eller en pull request.
 
-AI_KEY= din AI nyckel
-OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+## Kontakt
 
-STRIPE_API_KEY=din stripe nyckel
+Monika Engström – [GitHub](https://github.com/Monika-feg)
 
-STRIPE_SUCCESS_URL=https://example.com/success
-STRIPE_CANCEL_URL=https://example.com/success
+## Licens
 
-ADMIN_USERNAME=din admin
-ADMIN_PASSWORD=lösenord
-```
+SkolProjekt
 
-Starta Apiet med hjälp av Run Java knappen.
-
-
+projektet stratar när du kör
