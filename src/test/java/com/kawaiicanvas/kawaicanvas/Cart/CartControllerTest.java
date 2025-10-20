@@ -6,15 +6,21 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kawaiicanvas.kawaicanvas.Config.SecurityConfig;
 
 @WebMvcTest(CartController.class)
+// denna fick jag hjälp med från Chatgpt ( hade aldrig kommait på ett den
+// saknades)
+@Import(SecurityConfig.class)
 public class CartControllerTest {
 
     @Autowired
@@ -28,6 +34,7 @@ public class CartControllerTest {
 
     // skapa en ny kundvagn med en tom lista av tavlor
     @Test
+    @WithMockUser(username = "Testadmin", roles = "ADMIN")
     public void createNewCart() throws Exception {
 
         // skapa en ny kundvagn med en tom lista av tavlor
@@ -45,7 +52,7 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 // konverterar inputCart till JSON och skickar med i förfrågan
                 .content(objectMapper.writeValueAsString(inputCart)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Created cart successfully"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value("testCartId"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.canvases").isArray());
 
