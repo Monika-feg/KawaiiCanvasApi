@@ -16,6 +16,7 @@ public class CartUpdateService {
             throw new IllegalAccessError(" cartId cannot be null");
         }
         // hämtar kundvagnen eller skapar en ny om den inte finns
+        // computeIfAbsent är mapparens metod för att hämta eller skapa ett värde
         CartUpdateMessage cart = carts.computeIfAbsent(cartId, id -> new CartUpdateMessage(id, 0));
         // lägger till en tavla
         cart.setCanvasCount(cart.getCanvasCount() + 1);
