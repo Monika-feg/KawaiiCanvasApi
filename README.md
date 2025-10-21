@@ -49,6 +49,8 @@ Deploy adress: https://kawaiicanvasapi.onrender.com
    ADMIN_PASSWORD=lösenord
    ```
 
+   Starta projektet med run java
+
 ## Docker
 
 För att starta projektet och din container lokalt
@@ -74,14 +76,6 @@ docker run -p 8080:8080 kawaicanvas-api
 - `GET /canvas` – Hämta alla tavlor
 - `POST /cart` – Lägg till i kundvagn
 - `POST /order` – Skapa order
-
-## Docker
-
-Bygg och kör med Docker:
-
-```bash
-https://www.mongodb.com
-```
 
 ## Testa
 
