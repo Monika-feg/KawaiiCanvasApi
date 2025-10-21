@@ -2,6 +2,8 @@
 
 KawaiiCanvasApi är ett backend-API byggt med Spring Boot och MongoDB Atlas för att hantera en webbshop. Projektet är en skoluppgift och kan enkelt köras lokalt. Finns även en deployad version fram till 17/11 -2025.
 
+Depoy adress: https://kawaiicanvasapi.onrender.com
+
 ## Funktioner
 
 - API (kundtjänst med OpenAI)
@@ -50,6 +52,7 @@ KawaiiCanvasApi är ett backend-API byggt med Spring Boot och MongoDB Atlas för
 ## Docker
 
 För att starta projektet och din container
+Se till att ha docker igång
 
 Bygg Docker-image:
 
@@ -60,7 +63,7 @@ docker build -t kawaicanvas-api .
 Starta containern:
 
 ```powershell
-docker run -p 8080:8080 kawaicanvas-api
+docker run -p 8080:8080 --env-file .env kawaicanvas-api
 ```
 
 ## API-exempel
@@ -70,14 +73,6 @@ docker run -p 8080:8080 kawaicanvas-api
 - `GET /canvas` – Hämta alla tavlor
 - `POST /cart` – Lägg till i kundvagn
 - `POST /order` – Skapa order
-
-## Docker
-
-Bygg och kör med Docker:
-
-```bash
-https://www.mongodb.com
-```
 
 ## Testa
 
