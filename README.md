@@ -56,28 +56,33 @@ Deploy adress: https://kawaiicanvasapi.onrender.com
 ## Docker
 
 
-För att starta projektet och din container lokalt
-Vill du testa den depoyade så gå in på deploy branchen.
-Den har en egen Readme.
+För att starta projektet och din container lokalt:
 
 
 Bygg Docker-image:
 
 ```bash
 docker build -t kawaicanvas-api .
-```
-
-Starta containern:
-
-För att starta på deploy branchen:
-```bash
-docker run -p 8080:8080 --env-file .env kawaicanvas-api
-```
-Fört att köra lokalt:
-```bash
 docker run -p 8080:8080 kawaicanvas-api
-
 ```
+
+Vill du testa den deployade versionen, gå in på deploy-branchen.
+
+### Deployment (Render)
+
+1. Bygg Docker-image:
+   ```bash
+   docker build -t kawaicanvas-api .
+   ```
+2. Starta med miljövariabler:
+   ```bash
+   docker run -p 8080:8080 --env-file .env kawaicanvas-api
+   ```
+3. **På Render:** Lägg till miljövariabler via dashboarden (Settings → Environment). Render använder inte `.env`-filen i Docker-image, utan du sätter variablerna direkt i Render.
+
+   **Tips:**
+- Sätt aldrig känsliga nycklar direkt i koden eller i versionshanterad `application.properties`.
+- Deployment-branchen är separat från main och används bara för deployment.
 
 ## API-exempel
 
