@@ -53,6 +53,12 @@
            <version>0.22.0</version>
         </dependency>
 
+		<dependency>
+           <groupId>io.github.cdimascio</groupId>
+           <artifactId>dotenv-java</artifactId>
+           <version>3.0.0</version>
+        </dependency>
+
 	    <dependency>
              <groupId>de.flapdoodle.embed</groupId>
              <artifactId>de.flapdoodle.embed.mongo</artifactId>
