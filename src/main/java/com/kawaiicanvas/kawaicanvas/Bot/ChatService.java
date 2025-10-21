@@ -14,7 +14,7 @@ import com.openai.errors.OpenAIException;
 @Service
 public class ChatService {
 
-    @Value("${app.openai.api.url}")
+    @Value("${openai.api.url}")
     private String apiUrl;
 
     public final RestTemplate restTemplate;

@@ -53,6 +53,7 @@ Deploy adress: https://kawaiicanvasapi.onrender.com
 
 För att starta projektet och din container lokalt
 Vill du testa den depoyade så gå in på deploy branchen.
+Den har en egen Readme.
 
 Bygg Docker-image:
 
