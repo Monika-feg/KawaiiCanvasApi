@@ -38,12 +38,15 @@ public class PaymentService {
         Stripe.apiKey = stripeApiKey;
     }
 
-    public String implemetCheckout(BigDecimal amount, String cartId) {
+    public String implementCheckout(String orderId) {
+
         try {
             initStripe();
 
-            Order order = orderRepository.findCartById(cartId)
-                    .orElseThrow(() -> new IllegalArgumentException("Id not found: " + cartId));
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new IllegalArgumentException("Id not found: " + orderId));
+
+            BigDecimal amount = order.getTotalPrice();
 
             SessionCreateParams params = SessionCreateParams.builder()
                     // skickas till hit om betalningen lyckas
@@ -61,8 +64,9 @@ public class PaymentService {
                                                     .setUnitAmount(amount.multiply(BigDecimal.valueOf(100)).longValue())
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                    // denna ger produkten ett namn jag
-                                                                    .setName("Canvas # " + cartId)
+                                                                    // denna ger produkten ett namn jag vill synas i
+                                                                    // stripe dashboard
+                                                                    .setName("Canvas # " + order.getCart().getId())
                                                                     .build())
                                                     .build()
 
@@ -79,8 +83,9 @@ public class PaymentService {
             Payment payment = new Payment();
             payment.setOrderId(order.getId());
             payment.setStripePaymentId(session.getId());
-            payment.setPaymentStatus("pending");
+            payment.setPaymentStatus("paid");
             payment.setAmount(amount);
+            payment.setUrl(session.getUrl());
 
             paymentRepository.save(payment);
 
@@ -88,7 +93,7 @@ public class PaymentService {
             orderRepository.save(order);
 
             // töm kundvagnen efter betalning
-            cartService.clearCart(cartId);
+            cartService.clearCart(order.getCart().getId());
 
             return session.getUrl();
 
