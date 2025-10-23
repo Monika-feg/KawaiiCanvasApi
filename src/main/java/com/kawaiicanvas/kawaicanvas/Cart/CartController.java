@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
+import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
 import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -85,9 +87,11 @@ public class CartController {
     // lägger till canvas till kunvagnen
     @PatchMapping("/{cartId}/canvas/{canvasId}")
     public ResponseEntity<KawaiiResponse<Cart>> addCanvasToCart(@PathVariable String cartId,
-            @PathVariable String canvasId, HttpServletResponse response) {
+            @PathVariable String canvasId,
+            @RequestParam(defaultValue = "1") int quantity,
+            HttpServletResponse response) {
         try {
-            Cart updatedCart = cartService.addCanvasToCart(cartId, canvasId);
+            Cart updatedCart = cartService.addCanvasToCart(cartId, canvasId, quantity);
             return ResponseEntity.ok(KawaiiResponse.success("Added canvas to cart successfully", updatedCart));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));

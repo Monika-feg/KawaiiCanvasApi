@@ -15,7 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.kawaiicanvas.kawaicanvas.Canvas.Canvas;
-import com.kawaiicanvas.kawaicanvas.Cart.Cart;
+import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
+import com.kawaiicanvas.kawaicanvas.Cart.model.CartItem;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -40,12 +41,22 @@ public class OrderServiceTest {
         canvas2.setTitle("Adorable Dog");
         canvas2.setPrice("50");
 
+        CartItem item1 = new CartItem();
+        item1.setId("item1");
+        item1.setCanvas(canvas1);
+        item1.setNumberOfCanvases(1);
+
+        CartItem item2 = new CartItem();
+        item2.setId("item2");
+        item2.setCanvas(canvas2);
+        item2.setNumberOfCanvases(2);
+
         // skapa en ny kundvagn
         Cart cart = new Cart();
         cart.setId("testCartId");
-        cart.setCanvases(new ArrayList<>()); // Initialisera listan först
-        cart.getCanvases().add(canvas1);
-        cart.getCanvases().add(canvas2);
+        cart.setItems(new ArrayList<>()); // Initialisera listan först
+        cart.getItems().add(item1);
+        cart.getItems().add(item2);
 
         // skapa en ny order
         Order order = new Order();
@@ -64,7 +75,7 @@ public class OrderServiceTest {
         assertEquals("testOrderId", result.getId());
         assertEquals(cart, result.getCart());
         assertEquals("testCartId", result.getCart().getId());
-        assertEquals(2, result.getCart().getCanvases().size());
+        assertEquals(2, result.getCart().getItems().size());
     }
 
     // om den inte hittar order med angivet id
@@ -81,12 +92,22 @@ public class OrderServiceTest {
         canvas2.setTitle("Adorable Dog");
         canvas2.setPrice("50");
 
+        CartItem item1 = new CartItem();
+        item1.setId("item1");
+        item1.setCanvas(canvas1);
+        item1.setNumberOfCanvases(1);
+
+        CartItem item2 = new CartItem();
+        item2.setId("item2");
+        item2.setCanvas(canvas2);
+        item2.setNumberOfCanvases(2);
+
         // skapa en ny kundvagn
         Cart cart = new Cart();
         cart.setId("testCartId");
-        cart.setCanvases(new ArrayList<>()); // Initialisera listan först
-        cart.getCanvases().add(canvas1);
-        cart.getCanvases().add(canvas2);
+        cart.setItems(new ArrayList<>()); // Initialisera listan först
+        cart.getItems().add(item1);
+        cart.getItems().add(item2);
 
         // skapa en ny order
         Order order = new Order();

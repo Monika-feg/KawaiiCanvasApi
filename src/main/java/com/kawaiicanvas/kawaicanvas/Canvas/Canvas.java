@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kawaiicanvas.kawaicanvas.Cart.Cart;
+import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +26,7 @@ public class Canvas {
     private String title;
     @NotBlank
     private String price;
+    private String imageUrl;
 
     @DocumentReference
     @JsonIgnore // Förhindrar serialisering av cart-referensen

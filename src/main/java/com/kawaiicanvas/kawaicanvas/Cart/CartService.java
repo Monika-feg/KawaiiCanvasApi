@@ -1,6 +1,8 @@
 package com.kawaiicanvas.kawaicanvas.Cart;
 
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.kawaiicanvas.kawaicanvas.Canvas.Canvas;
 import com.kawaiicanvas.kawaicanvas.Canvas.CanvasRepository;
+import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
+import com.kawaiicanvas.kawaicanvas.Cart.model.CartItem;
 
 // felhantering tagit inspiration av
 // https://www.w3schools.com/java/java_ref_errors.asp
@@ -44,20 +48,27 @@ public class CartService {
     }
 
     // Lägger till en tavla till kundvagnen
-    public Cart addCanvasToCart(String cartId, String canvasId) {
+    public Cart addCanvasToCart(String cartId, String canvasId, int quantity) {
         try {
             Cart cart = getCartById(cartId);
-            Canvas canvas = canvasRepository.findById(canvasId).orElse(null);
+            Canvas canvas = canvasRepository.findById(canvasId).orElseThrow(
+                    () -> new IllegalArgumentException("Canvas not found with id: " + canvasId));
 
-            boolean isCanvasInCart = cart.getCanvases().stream()
-                    .anyMatch(existingCanvas -> existingCanvas.getId().equals(canvasId));
+            Optional<CartItem> existingCanvas = cart.getItems().stream()
+                    .filter(item -> item.getCanvas().getId().equals(canvasId))
+                    .findFirst();
 
-            if (!isCanvasInCart) {
-                cart.getCanvases().add(canvas);
-                return cartRepository.save(cart);
+            if (existingCanvas.isPresent()) {
+                existingCanvas.get().setNumberOfCanvases(quantity);
+            } else {
+                CartItem newItem = new CartItem();
+                newItem.setId(UUID.randomUUID().toString());
+                newItem.setCanvas(canvas);
+                newItem.setNumberOfCanvases(quantity);
+                cart.getItems().add(newItem);
             }
 
-            return cart;
+            return cartRepository.save(cart);
         } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException("Cart data is invalid ", e);
 
@@ -71,10 +82,11 @@ public class CartService {
     public Cart removeCanvasFromCart(String cartId, String canvasId) {
         try {
             Cart cart = getCartById(cartId);
-            Canvas canvas = canvasRepository.findById(canvasId).orElse(null);
+            Canvas canvas = canvasRepository.findById(canvasId)
+                    .orElseThrow(() -> new IllegalArgumentException("Canvas not found with id: " + canvasId));
 
             if (cart != null && canvas != null) {
-                cart.getCanvases().removeIf(existingCanvas -> existingCanvas.getId().equals(canvasId));
+                cart.getItems().removeIf(item -> item.getCanvas().getId().equals(canvasId));
                 return cartRepository.save(cart);
             }
             return cart;
@@ -96,12 +108,13 @@ public class CartService {
             // här är gränsen för fri frakt
             BigDecimal freeDeliveryThreshold = new BigDecimal("200");
             // lägger ihop priset för varje tavla i kundvagnen
-            for (var canvas : cart.getCanvases()) {
-                totalPrice = totalPrice.add(new BigDecimal(canvas.getPrice()));
+            for (var item : cart.getItems()) {
+                totalPrice = totalPrice.add(new BigDecimal(item.getCanvas().getPrice())
+                        .multiply(new BigDecimal(item.getNumberOfCanvases())));
             }
 
             // om totalpriset är under 200 kr läggs leveransavgiften på totalpriset
-            if (totalPrice.compareTo(freeDeliveryThreshold) < 0) {
+            if (totalPrice.compareTo(BigDecimal.ZERO) > 0 && totalPrice.compareTo(freeDeliveryThreshold) < 0) {
                 totalPrice = totalPrice.add(deliveryFee);
             }
             return totalPrice;
@@ -118,10 +131,10 @@ public class CartService {
     public Cart clearCart(String cartId) {
         try {
 
-            Cart cart = cartRepository.findById(cartId).orElse(null);
+            Cart cart = cartRepository.findById(cartId)
+                    .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
             if (cart != null) {
-                cart.getCanvases().forEach(canvas -> canvas.setCart(null));
-                cart.getCanvases().clear();
+                cart.getItems().clear();
                 return cartRepository.save(cart);
             }
             return cart;

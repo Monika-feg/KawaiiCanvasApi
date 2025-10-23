@@ -7,9 +7,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.kawaiicanvas.kawaicanvas.Cart.Cart;
 import com.kawaiicanvas.kawaicanvas.Cart.CartRepository;
 import com.kawaiicanvas.kawaicanvas.Cart.CartService;
+import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
 
 @Service
 public class OrderService {

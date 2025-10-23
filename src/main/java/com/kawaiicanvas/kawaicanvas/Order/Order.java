@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import com.kawaiicanvas.kawaicanvas.Cart.Cart;
+import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
 import com.kawaiicanvas.kawaicanvas.Customer.Customer;
 import com.kawaiicanvas.kawaicanvas.Payment.Payment;
 
