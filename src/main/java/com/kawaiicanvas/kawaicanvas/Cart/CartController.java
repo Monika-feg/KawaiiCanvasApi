@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +28,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 // för cookie https://www.baeldung.com/java-servlet-cookies-session och https://www.geeksforgeeks.org/springboot/working-with-cookies-in-spring-mvc-using-cookievalue-annotation/
 @RestController
 @RequestMapping("/api/cart")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Unauthorized"),
         @ApiResponse(responseCode = "400", description = "Bad request"),
@@ -38,16 +41,27 @@ public class CartController {
 
     // skapa ny kundvagn
     @PostMapping("/newCart")
-
-    public ResponseEntity<KawaiiResponse<Cart>> createNewCart(@RequestBody Cart cart, HttpServletResponse response) {
+    public ResponseEntity<KawaiiResponse<Cart>> createNewCart(
+            @RequestBody Cart cart,
+            HttpServletResponse response,
+            // https://docs.spring.io/spring-framework/reference/web/webflux/controller/ann-methods/cookievalue.html
+            @CookieValue(value = "cartId", required = false) String cartId) {
         try {
+            // kollar om en cookie med cartId redan finns
+            if (cartId != null) {
+                Cart existingCart = cartService.getCartById(cartId);
+                if (existingCart != null) {
+                    return ResponseEntity.ok(KawaiiResponse.success("Cart already exists", existingCart));
+                }
+            }
             Cart newCart = cartService.createNewCart(cart);
             Cookie cartCookie = new Cookie("cartId", newCart.getId());
+            cartCookie.setPath("/");
             // Sätter cookien att vara giltig i 5 dagar
             cartCookie.setMaxAge(60 * 60 * 24 * 5);
             response.addCookie(cartCookie);
-
             return ResponseEntity.ok(KawaiiResponse.success("Created cart successfully", newCart));
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
 

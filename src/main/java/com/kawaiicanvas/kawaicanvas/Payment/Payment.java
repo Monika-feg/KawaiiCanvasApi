@@ -21,5 +21,6 @@ public class Payment {
     private String stripePaymentId;
     private String paymentStatus;
     private BigDecimal amount;
+    private String url;
 
 }

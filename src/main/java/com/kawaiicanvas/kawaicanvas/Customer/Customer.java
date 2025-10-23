@@ -24,5 +24,7 @@ public class Customer {
     private String postalCode;
     @NotBlank
     private String phoneNumber;
+    @NotBlank
+    private String email;
 
 }
