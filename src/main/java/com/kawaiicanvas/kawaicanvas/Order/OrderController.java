@@ -52,7 +52,7 @@ public class OrderController {
                     isLocal ? "" : " Secure;", // Secure bara i produktion
                     isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
             );
-            response.setHeader("Set-Cookie", cookieValue);
+            response.addHeader("Set-Cookie", cookieValue);
             return ResponseEntity.ok(KawaiiResponse.success("Order created successfully", createdOrder));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));

@@ -70,7 +70,7 @@ public class CartController {
                     isLocal ? "" : " Secure;", // Secure bara i produktion
                     isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
             );
-            response.setHeader("Set-Cookie", cookieValue);
+            response.addHeader("Set-Cookie", cookieValue);
             return ResponseEntity.ok(KawaiiResponse.success("Created cart successfully", newCart));
 
         } catch (Exception e) {
