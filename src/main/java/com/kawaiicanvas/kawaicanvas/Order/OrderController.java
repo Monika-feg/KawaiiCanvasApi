@@ -45,9 +45,8 @@ public class OrderController {
             // Avgör om vi kör lokalt
             boolean isLocal = request.getServerName().contains("localhost");
 
-            // Bygg cookie-header
             String cookieValue = String.format(
-                    "orderId=%s; Path=/; Max-Age=%d; SameSite=%s",
+                    "orderId=%s; Path=/; Max-Age=%d;%s SameSite=%s",
                     createdOrder.getId(),
                     60 * 60, // 60 minuter
                     isLocal ? "" : " Secure;", // Secure bara i produktion

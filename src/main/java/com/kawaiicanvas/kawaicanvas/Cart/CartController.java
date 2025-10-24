@@ -64,7 +64,7 @@ public class CartController {
 
             // Bygg cookie-header
             String cookieValue = String.format(
-                    "cartId=%s; Path=/; Max-Age=%d; SameSite=%s",
+                    "cartId=%s; Path=/; Max-Age=%d;%s SameSite=%s",
                     newCart.getId(),
                     60 * 60 * 24 * 5, // 5 dagar
                     isLocal ? "" : " Secure;", // Secure bara i produktion
