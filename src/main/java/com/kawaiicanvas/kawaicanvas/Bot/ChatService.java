@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
 import com.kawaiicanvas.kawaicanvas.Bot.model.ChatRequest;
 import com.kawaiicanvas.kawaicanvas.Bot.model.ChatResponse;
 import com.openai.errors.OpenAIException;
