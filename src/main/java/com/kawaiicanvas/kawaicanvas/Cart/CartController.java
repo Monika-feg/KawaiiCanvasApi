@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
@@ -45,6 +45,7 @@ public class CartController {
     @PostMapping("/newCart")
     public ResponseEntity<KawaiiResponse<Cart>> createNewCart(
             @RequestBody Cart cart,
+            HttpServletRequest request,
             HttpServletResponse response,
             // https://docs.spring.io/spring-framework/reference/web/webflux/controller/ann-methods/cookievalue.html
             @CookieValue(value = "cartId", required = false) String cartId) {
@@ -57,13 +58,19 @@ public class CartController {
                 }
             }
             Cart newCart = cartService.createNewCart(cart);
-            Cookie cartCookie = new Cookie("cartId", newCart.getId());
-            cartCookie.setHttpOnly(true);
-            cartCookie.setSecure(true);
-            cartCookie.setPath("/");
-            // Sätter cookien att vara giltig i 5 dagar
-            cartCookie.setMaxAge(60 * 60 * 24 * 5);
-            response.addCookie(cartCookie);
+
+            // Bestäm om vi kör lokalt
+            boolean isLocal = request.getServerName().contains("localhost");
+
+            // Bygg cookie-header
+            String cookieValue = String.format(
+                    "cartId=%s; Path=/; Max-Age=%d;%s SameSite=%s",
+                    newCart.getId(),
+                    60 * 60 * 24 * 5, // 5 dagar
+                    isLocal ? "" : " Secure;", // Secure bara i produktion
+                    isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
+            );
+            response.setHeader("Set-Cookie", cookieValue);
             return ResponseEntity.ok(KawaiiResponse.success("Created cart successfully", newCart));
 
         } catch (Exception e) {
