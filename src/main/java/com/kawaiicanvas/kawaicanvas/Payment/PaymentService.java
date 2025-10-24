@@ -20,7 +20,7 @@ public class PaymentService {
     @Value("${stripe.api.key}")
     private String stripeApiKey;
 
-    @Value("${stripe.success.url}")
+    @Value("${stripe.success.url2}")
     private String stripeSuccessUrl;
 
     @Value("${stripe.cancel.url}")
@@ -51,6 +51,7 @@ public class PaymentService {
             SessionCreateParams params = SessionCreateParams.builder()
                     // skickas till hit om betalningen lyckas
                     .setSuccessUrl(stripeSuccessUrl)
+
                     // skickas hit om betalningen avbtyts
                     .setCancelUrl(stripeCancelUrl)
                     // definierar en produkt
