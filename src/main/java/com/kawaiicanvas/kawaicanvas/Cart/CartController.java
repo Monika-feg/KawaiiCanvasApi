@@ -58,6 +58,8 @@ public class CartController {
             }
             Cart newCart = cartService.createNewCart(cart);
             Cookie cartCookie = new Cookie("cartId", newCart.getId());
+            cartCookie.setHttpOnly(true);
+            cartCookie.setSecure(true);
             cartCookie.setPath("/");
             // Sätter cookien att vara giltig i 5 dagar
             cartCookie.setMaxAge(60 * 60 * 24 * 5);
