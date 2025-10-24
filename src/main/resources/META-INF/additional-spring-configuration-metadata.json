@@ -14,11 +14,7 @@
     "type": "java.lang.String",
     "description": "A description for 'stripe.cancel.url'"
   },
-  {
-    "name": "stripe.success.url",
-    "type": "java.lang.String",
-    "description": "A description for 'stripe.success.url'"
-  },
+  
   {
     "name": "stripe.api.key",
     "type": "java.lang.String",
@@ -43,5 +39,10 @@
     "name": "spring.dotenv.ignore-if-missing",
     "type": "java.lang.String",
     "description": "A description for 'spring.dotenv.ignore-if-missing'"
+  },
+  {
+    "name": "stripe.success.url2",
+    "type": "java.lang.String",
+    "description": "A description for 'stripe.success.url2'"
   }
 ]}
