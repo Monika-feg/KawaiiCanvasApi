@@ -26,7 +26,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/canvas/admin/newCanvas").hasRole("ADMIN")
                         .requestMatchers("/api/canvas/admin/deleteCanvas/{id}").hasRole("ADMIN")
                         .anyRequest().permitAll())
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults())
+                .cors(Customizer.withDefaults());
 
         return http.build();
     }
@@ -37,7 +38,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "http://localhost:8080",
-                "https://kawaiicanvas.netlify.app/"));
+                "https://kawaiicanvas.netlify.app"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
