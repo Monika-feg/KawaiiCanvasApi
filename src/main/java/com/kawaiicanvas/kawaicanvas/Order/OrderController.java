@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 // https://www.baeldung.com/swagger-operation-vs-apiresponse
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = { "http://localhost:5173/", "https://kawaiicanvas.netlify.app/" }, allowCredentials = "true")
+@CrossOrigin(origins = { "http://localhost:5173/", "https://kawaiicanvas.netlify.app" }, allowCredentials = "true")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Unauthorized"),
         @ApiResponse(responseCode = "400", description = "Bad request"),
@@ -40,6 +40,8 @@ public class OrderController {
         try {
             Order createdOrder = orderService.saveNewOrder(order, cartId);
             Cookie orderCookie = new Cookie("orderId", createdOrder.getId());
+            orderCookie.setHttpOnly(true);
+            orderCookie.setSecure(true);
             orderCookie.setPath("/");
             orderCookie.setMaxAge(60 * 60); // Sätter cookien att vara giltig i 60 minuter
             response.addCookie(orderCookie);

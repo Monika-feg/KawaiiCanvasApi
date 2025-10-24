@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 // https://www.baeldung.com/swagger-operation-vs-apiresponse
 @RestController
 @RequestMapping("/api/canvas")
-@CrossOrigin(origins = { "http://localhost:5173/", "https://kawaiicanvas.netlify.app/#/" })
+@CrossOrigin(origins = { "http://localhost:5173/", "https://kawaiicanvas.netlify.app" })
 @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Unauthorized"),
         @ApiResponse(responseCode = "400", description = "Bad request"),

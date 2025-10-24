@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/api/payments")
-@CrossOrigin(origins = { "http://localhost:5173/", "https://kawaiicanvas.netlify.app/" }, allowCredentials = "true")
+@CrossOrigin(origins = { "http://localhost:5173/", "https://kawaiicanvas.netlify.app" }, allowCredentials = "true")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Unauthorized"),
         @ApiResponse(responseCode = "400", description = "Bad request"),
