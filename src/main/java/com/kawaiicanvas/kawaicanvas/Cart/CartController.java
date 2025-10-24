@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 // för cookie https://www.baeldung.com/java-servlet-cookies-session och https://www.geeksforgeeks.org/springboot/working-with-cookies-in-spring-mvc-using-cookievalue-annotation/
 @RestController
 @RequestMapping("/api/cart")
-@CrossOrigin(origins = { "http://localhost:5173", "https://kawaiicanvas.netlify.app/#/" }, allowCredentials = "true")
+@CrossOrigin(origins = { "http://localhost:5173", "https://kawaiicanvas.netlify.app/" }, allowCredentials = "true")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Unauthorized"),
         @ApiResponse(responseCode = "400", description = "Bad request"),
