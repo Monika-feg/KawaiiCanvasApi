@@ -1,7 +1,5 @@
 package com.kawaiicanvas.kawaicanvas.Cart.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import com.kawaiicanvas.kawaicanvas.Canvas.Canvas;
