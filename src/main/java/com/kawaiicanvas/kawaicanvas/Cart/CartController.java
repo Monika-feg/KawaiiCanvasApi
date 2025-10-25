@@ -41,6 +41,33 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    // hämta eller skapa kundvagn från cookie(en privat metod)
+    private Cart getOrCreateCartFromCookie(String cartId, HttpServletRequest request,
+            HttpServletResponse response) {
+        try {
+            if (cartId != null) {
+                Cart existingCart = cartService.getCartById(cartId);
+                if (existingCart != null) {
+                    return existingCart;
+                }
+            }
+            Cart newCart = cartService.createNewCart(new Cart());
+            boolean isLocal = request.getServerName().contains("localhost");
+            String cookieValue = String.format(
+                    "cartId=%s; Path=/; Max-Age=%d;%s SameSite=%s",
+                    newCart.getId(),
+                    60 * 60 * 24 * 5, // 5 dagar
+                    isLocal ? "" : " Secure;", // Secure bara i produktion
+                    isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
+            );
+            response.addHeader("Set-Cookie", cookieValue);
+            return newCart;
+
+        } catch (Exception e) {
+            throw new IllegalAccessError("Could not create or retrieve cart");
+        }
+    }
+
     // skapa ny kundvagn
     @PostMapping("/newCart")
     public ResponseEntity<KawaiiResponse<Cart>> createNewCart(
@@ -50,27 +77,7 @@ public class CartController {
             // https://docs.spring.io/spring-framework/reference/web/webflux/controller/ann-methods/cookievalue.html
             @CookieValue(value = "cartId", required = false) String cartId) {
         try {
-            // kollar om en cookie med cartId redan finns
-            if (cartId != null) {
-                Cart existingCart = cartService.getCartById(cartId);
-                if (existingCart != null) {
-                    return ResponseEntity.ok(KawaiiResponse.success("Cart already exists", existingCart));
-                }
-            }
-            Cart newCart = cartService.createNewCart(cart);
-
-            // Bestäm om vi kör lokalt
-            boolean isLocal = request.getServerName().contains("localhost");
-
-            // Bygg cookie-header
-            String cookieValue = String.format(
-                    "cartId=%s; Path=/; Max-Age=%d;%s SameSite=%s domain=kawaiicanvas.netlify.app",
-                    newCart.getId(),
-                    60 * 60 * 24 * 5, // 5 dagar
-                    isLocal ? "" : " Secure;", // Secure bara i produktion
-                    isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
-            );
-            response.addHeader("Set-Cookie", cookieValue);
+            Cart newCart = getOrCreateCartFromCookie(cartId, request, response);
             return ResponseEntity.ok(KawaiiResponse.success("Created cart successfully", newCart));
 
         } catch (Exception e) {
@@ -81,11 +88,15 @@ public class CartController {
     }
 
     // hämta kundvagn med id
-    @GetMapping("/{id}")
-    public ResponseEntity<KawaiiResponse<Cart>> getCartById(@PathVariable String id) {
+    @GetMapping("/currentCart")
+    public ResponseEntity<KawaiiResponse<Cart>> getCurrentCart(
+            @CookieValue(value = "cartId", required = false) String cartId,
+            HttpServletResponse response,
+            HttpServletRequest request) {
         try {
-            Cart foundCart = cartService.getCartById(id);
-            return ResponseEntity.ok(KawaiiResponse.success("Found cart successfully", foundCart));
+            Cart newCart = getOrCreateCartFromCookie(cartId, request, response);
+            return ResponseEntity.ok(KawaiiResponse.success("Created new cart successfully", newCart));
+
         } catch (IllegalAccessError e) {
             return ResponseEntity.notFound().build();
 
