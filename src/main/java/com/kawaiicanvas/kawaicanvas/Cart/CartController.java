@@ -81,8 +81,9 @@ public class CartController {
     }
 
     // hämta kundvagn med id
-    @GetMapping("/{id}")
-    public ResponseEntity<KawaiiResponse<Cart>> getCartById(@PathVariable String id) {
+    @GetMapping("/currentCart")
+    public ResponseEntity<KawaiiResponse<Cart>> getCartById(
+            @CookieValue(value = "cartId") String id) {
         try {
             Cart foundCart = cartService.getCartById(id);
             return ResponseEntity.ok(KawaiiResponse.success("Found cart successfully", foundCart));
