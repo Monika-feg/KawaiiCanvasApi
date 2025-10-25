@@ -46,13 +46,13 @@ public class OrderController {
             boolean isLocal = request.getServerName().contains("localhost");
 
             String cookieValue = String.format(
-                    "orderId=%s; Path=/; Max-Age=%d;%s SameSite=%s",
+                    "orderId=%s; Path=/; Max-Age=%d;%s SameSite=%s domain=kawaiicanvas.netlify.app",
                     createdOrder.getId(),
                     60 * 60, // 60 minuter
                     isLocal ? "" : " Secure;", // Secure bara i produktion
                     isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
             );
-            response.setHeader("Set-Cookie", cookieValue);
+            response.addHeader("Set-Cookie", cookieValue);
             return ResponseEntity.ok(KawaiiResponse.success("Order created successfully", createdOrder));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
