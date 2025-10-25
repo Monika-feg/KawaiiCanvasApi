@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
 
@@ -37,27 +35,13 @@ public class OrderController {
     @PostMapping("/{cartId}")
     public ResponseEntity<KawaiiResponse<Order>> createOrder(
             @RequestBody Order order,
-            @PathVariable String cartId,
-            HttpServletResponse response,
-            HttpServletRequest request) {
+            @PathVariable String cartId) {
         try {
             Order createdOrder = orderService.saveNewOrder(order, cartId);
-            // Avgör om vi kör lokalt
-            boolean isLocal = request.getServerName().contains("localhost");
-
-            String cookieValue = String.format(
-                    "orderId=%s; Path=/; Max-Age=%d;%s SameSite=%s domain=kawaiicanvas.netlify.app",
-                    createdOrder.getId(),
-                    60 * 60, // 60 minuter
-                    isLocal ? "" : " Secure;", // Secure bara i produktion
-                    isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
-            );
-            response.addHeader("Set-Cookie", cookieValue);
             return ResponseEntity.ok(KawaiiResponse.success("Order created successfully", createdOrder));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
         }
-
     }
 
     // hämta order med hjälp av id

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
 import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
@@ -27,7 +24,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 // för felhantering har jag inspirerats av dessa
 // https://www.baeldung.com/spring-rest-openapi-documentation
 // https://www.baeldung.com/swagger-operation-vs-apiresponse
-// för cookie https://www.baeldung.com/java-servlet-cookies-session och https://www.geeksforgeeks.org/springboot/working-with-cookies-in-spring-mvc-using-cookievalue-annotation/
 @RestController
 @RequestMapping("/api/cart")
 @CrossOrigin(origins = { "http://localhost:5173", "https://kawaiicanvas.netlify.app" }, allowCredentials = "true")
@@ -43,63 +39,31 @@ public class CartController {
 
     // skapa ny kundvagn
     @PostMapping("/newCart")
-    public ResponseEntity<KawaiiResponse<Cart>> createNewCart(
-            @RequestBody Cart cart,
-            HttpServletRequest request,
-            HttpServletResponse response,
-            // https://docs.spring.io/spring-framework/reference/web/webflux/controller/ann-methods/cookievalue.html
-            @CookieValue(value = "cartId", required = false) String cartId) {
+    public ResponseEntity<KawaiiResponse<Cart>> createNewCart(@RequestBody Cart cart) {
         try {
-            // kollar om en cookie med cartId redan finns
-            if (cartId != null) {
-                Cart existingCart = cartService.getCartById(cartId);
-                if (existingCart != null) {
-                    return ResponseEntity.ok(KawaiiResponse.success("Cart already exists", existingCart));
-                }
-            }
             Cart newCart = cartService.createNewCart(cart);
-
-            // Bestäm om vi kör lokalt
-            boolean isLocal = request.getServerName().contains("localhost");
-
-            // Bygg cookie-header
-            String cookieValue = String.format(
-                    "cartId=%s; Path=/; Max-Age=%d;%s SameSite=%s",
-                    newCart.getId(),
-                    60 * 60 * 24 * 5, // 5 dagar
-                    isLocal ? "" : " Secure;", // Secure bara i produktion
-                    isLocal ? "Lax" : "None" // SameSite=Lax lokalt, None i produktion
-            );
-            response.addHeader("Set-Cookie", cookieValue);
             return ResponseEntity.ok(KawaiiResponse.success("Created cart successfully", newCart));
-
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
-
         }
-
     }
 
     // hämta kundvagn med id
-    @GetMapping("/currentCart")
-    public ResponseEntity<KawaiiResponse<Cart>> getCartById(
-            @CookieValue(value = "cartId") String id) {
+    @GetMapping("/{cartId}")
+    public ResponseEntity<KawaiiResponse<Cart>> getCartById(@PathVariable String cartId) {
         try {
-            Cart foundCart = cartService.getCartById(id);
+            Cart foundCart = cartService.getCartById(cartId);
             return ResponseEntity.ok(KawaiiResponse.success("Found cart successfully", foundCart));
         } catch (IllegalAccessError e) {
             return ResponseEntity.notFound().build();
-
         }
-
     }
 
     // lägger till canvas till kunvagnen
     @PatchMapping("/{cartId}/canvas/{canvasId}")
     public ResponseEntity<KawaiiResponse<Cart>> addCanvasToCart(@PathVariable String cartId,
             @PathVariable String canvasId,
-            @RequestParam(defaultValue = "1") int quantity,
-            HttpServletResponse response) {
+            @RequestParam(defaultValue = "1") int quantity) {
         try {
             Cart updatedCart = cartService.addCanvasToCart(cartId, canvasId, quantity);
             return ResponseEntity.ok(KawaiiResponse.success("Added canvas to cart successfully", updatedCart));
