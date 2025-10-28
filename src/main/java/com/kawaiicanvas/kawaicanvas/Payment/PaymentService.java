@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.kawaiicanvas.kawaicanvas.Cart.CartService;
 import com.kawaiicanvas.kawaicanvas.Order.Order;
 import com.kawaiicanvas.kawaicanvas.Order.OrderRepository;
+import com.kawaiicanvas.kawaicanvas.Websocket.InventoryService;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
@@ -32,6 +33,8 @@ public class PaymentService {
     private OrderRepository orderRepository;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private InventoryService inventoryService;
 
     // Initiera Stripe med API-nyckel
     public void initStripe() {
@@ -50,7 +53,7 @@ public class PaymentService {
 
             SessionCreateParams params = SessionCreateParams.builder()
                     // skickas till hit om betalningen lyckas
-                    .setSuccessUrl(stripeSuccessUrl)
+                    .setSuccessUrl(stripeSuccessUrl + "?session_id={CHECKOUT_SESSION_ID}")
 
                     // skickas hit om betalningen avbtyts
                     .setCancelUrl(stripeCancelUrl)
@@ -84,7 +87,7 @@ public class PaymentService {
             Payment payment = new Payment();
             payment.setOrderId(order.getId());
             payment.setStripePaymentId(session.getId());
-            payment.setPaymentStatus("paid");
+            payment.setPaymentStatus("paying");
             payment.setAmount(amount);
             payment.setUrl(session.getUrl());
 
@@ -93,9 +96,6 @@ public class PaymentService {
             order.setPayment(payment);
             orderRepository.save(order);
 
-            // töm kundvagnen efter betalning
-            cartService.clearCart(order.getCart().getId());
-
             return session.getUrl();
 
         } catch (Exception e) {
@@ -103,6 +103,52 @@ public class PaymentService {
             return "Fel vid betalning, försök igen senare";
 
         }
+    }
+
+    public boolean isPaymentSuccessful(String sessionId) {
+        try {
+            // hämtar session ifrån stripe
+            System.out.println("sessionId: " + sessionId);
+            Session session = Session.retrieve(sessionId);
+            System.out.println("Stripe session status: " + session.getPaymentStatus());
+            // kollar om betalningen är lyckad
+            if ("paid".equals(session.getPaymentStatus()) || "complete".equals(session.getPaymentStatus())) {
+                Payment payment = paymentRepository.findByStripePaymentId(sessionId);
+                if (payment != null) {
+                    String orderId = payment.getOrderId();
+                    // Hämta order-objektet för att kunna tömma rätt cart
+                    Order order = orderRepository.findById(orderId).orElse(null);
+                    // Uppdatera lagerstatus INNAN kundvagnen töms
+                    inventoryService.handleInventoryUpdate(orderId);
+                    System.out.println("✅ Payment successful for session: " + sessionId);
+                    // töm kundvagnen efter lageruppdatering
+                    if (order != null && order.getCart() != null) {
+                        cartService.clearCart(order.getCart().getId());
+                    }
+                }
+                return true;
+            } else {
+                System.out.println("ℹ️ Payment not successful for session: " + sessionId + " Status: "
+                        + session.getPaymentStatus());
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.err.println("⚠️ Error checking payment: " + e.getMessage());
+            return false;
+
+        }
+
+    }
+
+    // Hämta Payment via sessionId
+    public Payment getPaymentBySessionId(String sessionId) {
+        return paymentRepository.findByStripePaymentId(sessionId);
+    }
+
+    // Hämta Order via orderId
+    public Order getOrderById(String orderId) {
+        return orderRepository.findById(orderId).orElse(null);
     }
 
 }

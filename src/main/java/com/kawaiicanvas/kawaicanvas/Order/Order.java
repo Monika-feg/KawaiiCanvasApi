@@ -1,12 +1,14 @@
 package com.kawaiicanvas.kawaicanvas.Order;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import com.kawaiicanvas.kawaicanvas.Cart.model.Cart;
+import com.kawaiicanvas.kawaicanvas.Cart.model.CartItem;
 import com.kawaiicanvas.kawaicanvas.Customer.Customer;
 import com.kawaiicanvas.kawaicanvas.Payment.Payment;
 
@@ -23,6 +25,7 @@ public class Order {
     @Id
     private String id;
     private BigDecimal totalPrice;
+    private List<CartItem> items;
     private Customer customer;
     @DocumentReference
     private Cart cart;

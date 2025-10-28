@@ -1,6 +1,7 @@
 package com.kawaiicanvas.kawaicanvas.Order;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -32,6 +33,7 @@ public class OrderService {
             order.setCart(cart);
             BigDecimal totalprice = cartService.getTotalPrice(cartId);
             order.setTotalPrice(totalprice);
+            order.setItems(new ArrayList<>(cart.getItems()));
             return orderRepository.save(order);
         } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException(" Order data is invalid ", e);
