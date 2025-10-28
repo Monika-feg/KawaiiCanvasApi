@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
+import com.kawaiicanvas.kawaicanvas.Order.Order;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -48,13 +49,21 @@ public class PaymentController {
     }
 
     @GetMapping("/success")
-    public ResponseEntity<KawaiiResponse<String>> paymentSuccess(@RequestParam String sessionId) {
+    public ResponseEntity<KawaiiResponse<Object>> paymentSuccess(@RequestParam String sessionId) {
         try {
             boolean isSuccess = paymentService.isPaymentSuccessful(sessionId);
             if (isSuccess) {
-
-                return ResponseEntity
-                        .ok(KawaiiResponse.success("Payment successful", "Payment completed successfully"));
+                // Hämta payment och order
+                Payment payment = paymentService.getPaymentBySessionId(sessionId);
+                if (payment == null) {
+                    return ResponseEntity.badRequest().body(KawaiiResponse.error("Payment not found"));
+                }
+                String orderId = payment.getOrderId();
+                Order order = paymentService.getOrderById(orderId);
+                if (order == null) {
+                    return ResponseEntity.badRequest().body(KawaiiResponse.error("Order not found"));
+                }
+                return ResponseEntity.ok(KawaiiResponse.success("Payment successful", order));
             } else {
                 return ResponseEntity.badRequest().body(KawaiiResponse.error("Payment not successful"));
             }
