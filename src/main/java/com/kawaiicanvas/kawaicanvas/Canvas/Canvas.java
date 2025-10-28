@@ -27,7 +27,7 @@ public class Canvas {
     @NotBlank
     private String price;
     private String imageUrl;
-
+    private int stockQuantity;
     @DocumentReference
     @JsonIgnore // Förhindrar serialisering av cart-referensen
     private Cart cart;

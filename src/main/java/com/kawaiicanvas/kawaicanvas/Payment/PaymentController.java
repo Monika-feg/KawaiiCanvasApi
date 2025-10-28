@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,6 +42,22 @@ public class PaymentController {
             Map<String, String> response = new HashMap<>();
             response.put("url", url);
             return ResponseEntity.ok(KawaiiResponse.success("Checkout URL created successfully", response));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/success")
+    public ResponseEntity<KawaiiResponse<String>> paymentSuccess(@RequestParam String sessionId) {
+        try {
+            boolean isSuccess = paymentService.isPaymentSuccessful(sessionId);
+            if (isSuccess) {
+
+                return ResponseEntity
+                        .ok(KawaiiResponse.success("Payment successful", "Payment completed successfully"));
+            } else {
+                return ResponseEntity.badRequest().body(KawaiiResponse.error("Payment not successful"));
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(KawaiiResponse.error(e.getMessage()));
         }

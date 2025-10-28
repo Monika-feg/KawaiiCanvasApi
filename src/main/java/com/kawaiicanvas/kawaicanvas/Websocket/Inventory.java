@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartUpdateMessage {
+public class Inventory {
 
-    private String cartId;
-    private int canvasCount;
+    private String itemId;
+    private String itemName;
+    private int quantity;
 
 }
