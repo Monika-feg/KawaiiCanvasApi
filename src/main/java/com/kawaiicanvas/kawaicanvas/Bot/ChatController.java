@@ -2,6 +2,7 @@ package com.kawaiicanvas.kawaicanvas.Bot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import com.kawaiicanvas.kawaicanvas.Bot.model.ChatbotDto;
 import com.kawaiicanvas.kawaicanvas.KawaiiResponse.KawaiiResponse;
 
 @RestController
+@CrossOrigin(origins = { "http://localhost:5173", "https://kawaiicanvas.netlify.app" })
 public class ChatController {
 
     @Autowired
