@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// info om kunden inför en beställning
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

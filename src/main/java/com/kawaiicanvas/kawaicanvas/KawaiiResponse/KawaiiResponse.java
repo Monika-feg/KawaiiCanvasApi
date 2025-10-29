@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// skapade en generell responsklass för API:et
+// fick hjälp med logiken från copilot då jag vill ha en generell responsklass
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
