@@ -18,6 +18,8 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
+    // postmapping för /bot som tar emot en ChatbotDto och returnerar en
+    // KawaiiResponse med svaret från chatService
     @PostMapping("/bot")
     public ResponseEntity<KawaiiResponse<String>> chatMessage(@RequestBody ChatbotDto chatbotDto) {
         try {

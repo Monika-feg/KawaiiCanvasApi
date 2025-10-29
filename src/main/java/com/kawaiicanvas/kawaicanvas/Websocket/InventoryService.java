@@ -27,6 +27,8 @@ public class InventoryService {
         this.messageTemplate = messageTemplate;
     }
 
+    // hanterar lageruppdatering efter en lyckad betalning
+    // fick hjälp av copilot med logik och hur jag skulle länka till payment service
     public void handleInventoryUpdate(String orderId) {
         // hämta order från orderRepository med hjälp av itemId
         Order order = orderRepository.findById(orderId)
@@ -43,7 +45,8 @@ public class InventoryService {
             canvasRepository.save(canvas);
 
             // skicka live uppdatering till frontend
-            System.out.println("Skickar lageruppdatering för canvas: " + canvas.getId() + " - Nytt lager: " + canvas.getStockQuantity());
+            System.out.println("Skickar lageruppdatering för canvas: " + canvas.getId() + " - Nytt lager: "
+                    + canvas.getStockQuantity());
             messageTemplate.convertAndSend("/topic/stock",
                     new Inventory(canvas.getId(), canvas.getTitle(), canvas.getStockQuantity()));
         }
