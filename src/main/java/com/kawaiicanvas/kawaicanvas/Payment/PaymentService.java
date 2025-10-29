@@ -41,6 +41,8 @@ public class PaymentService {
         Stripe.apiKey = stripeApiKey;
     }
 
+    // implementerar checkout process och returnerar URL för betalning
+    // använde denna kod i ett annat projekt tidigare och anpassade den här
     public String implementCheckout(String orderId) {
 
         try {
@@ -84,6 +86,7 @@ public class PaymentService {
 
             Session session = Session.create(params);
 
+            // sparar betalningen i databasen
             Payment payment = new Payment();
             payment.setOrderId(order.getId());
             payment.setStripePaymentId(session.getId());
@@ -92,10 +95,10 @@ public class PaymentService {
             payment.setUrl(session.getUrl());
 
             paymentRepository.save(payment);
-
+            // kopplar betalningen till ordern
             order.setPayment(payment);
             orderRepository.save(order);
-
+            // returnerar URL för checkout
             return session.getUrl();
 
         } catch (Exception e) {
@@ -104,6 +107,10 @@ public class PaymentService {
 
         }
     }
+
+    // kollar om betalningen är lyckad
+    // hade missat denna när det inte fungerade med websocket, fick hjälp av copilot
+    // med logik och hur jag skulle länka
 
     public boolean isPaymentSuccessful(String sessionId) {
         try {

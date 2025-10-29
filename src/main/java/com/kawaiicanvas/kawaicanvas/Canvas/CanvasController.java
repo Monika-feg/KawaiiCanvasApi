@@ -34,6 +34,7 @@ public class CanvasController {
     @Autowired
     private CanvasService canvasService;
 
+    // hämtar alla canvas
     @GetMapping()
     public ResponseEntity<KawaiiResponse<List<Canvas>>> getAllCanvas() {
 
@@ -46,6 +47,7 @@ public class CanvasController {
 
     }
 
+    // hämtar en canvas med id
     @GetMapping("/{id}")
     public ResponseEntity<KawaiiResponse<Canvas>> getCanvasById(@PathVariable String id) {
         try {

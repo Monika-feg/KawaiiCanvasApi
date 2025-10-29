@@ -32,6 +32,7 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
+    // skapar en betalning och returnerar checkout URL
     @PostMapping()
     public ResponseEntity<KawaiiResponse<Map<String, String>>> createPayment(@RequestParam String orderId) {
         try {
@@ -48,6 +49,7 @@ public class PaymentController {
         }
     }
 
+    // hanterar lyckad betalning
     @GetMapping("/success")
     public ResponseEntity<KawaiiResponse<Object>> paymentSuccess(@RequestParam String sessionId) {
         try {

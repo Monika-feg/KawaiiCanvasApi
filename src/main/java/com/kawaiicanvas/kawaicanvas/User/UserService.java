@@ -21,6 +21,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUserName("admin").toString();
     }
 
+    // laddar användare baserat på användarnamn för autentisering
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUserName(username).stream().findFirst()

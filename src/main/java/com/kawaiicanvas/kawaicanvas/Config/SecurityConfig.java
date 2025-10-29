@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // konfigurerar säkerhetsfilterkedjan
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -32,6 +33,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // konfigurerar CORS-inställningar
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -49,6 +51,7 @@ public class SecurityConfig {
 
     }
 
+    // skapar en PasswordEncoder för att hasha lösenord
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

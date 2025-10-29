@@ -12,6 +12,7 @@ public class OpenAiConfig {
     @Value("${openai.api.key}")
     private String apiKey;
 
+    // skapar en RestTemplate för att kommunicera med OpenAI API
     @Bean
     @Qualifier("openAiRestTemplate")
     public RestTemplate openaiRestTemplate() {
